@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Inventory Stage 2</string>
+    <string name="action_settings">settings</string>
+    <string name="add_new_product">add a new product</string>
+    <string name="init_instructions">nothing to display because no data stored, click on below + button to add a new product</string>
+    <string name="product_name">product name</string>
+    <string name="product_price">product price</string>
+    <string name="product_quantity">product quantity</string>
+    <string name="product_supplier_name">product supplier name</string>
+    <string name="product_supplier_phone_number">product supplier phone number</string>
+    <string name="save">save</string>
+    <string name="delete">delete</string>
+    <string name="edit_product_detail">edit product detail</string>
+    <string name="insert_valid_name">insert a valid product name</string>
+    <string name="insert_valid_supplier_name">insert a valid product supplier name</string>
+    <string name="insert_valid_supplier_phone">insert a valid supplier phone number</string>
+    <string name="action_insert_dummy_data">insert dummy data</string>
+    <string name="action_delete_all_entries">delete all entries</string>
+</resources>
