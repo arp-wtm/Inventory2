@@ -87,7 +87,7 @@ public class CatalogActivity extends AppCompatActivity
                 // Set the URI on the data field of the intent
                 intent.setData(currentProductUri);
 
-                // Launch the {@link EditorActivity} to display the data for the current pet.
+                // Launch the {@link EditorActivity} to display the data for the current product.
                 startActivity(intent);
             }
         });
@@ -97,7 +97,7 @@ public class CatalogActivity extends AppCompatActivity
     }
 
     /**
-     * Helper method to insert hardcoded data into retail database.
+     * Helper method to insert hardcoded data into products database.
      */
     private void insertProduct() {
         // Create a ContentValues object where column names are the keys,
@@ -107,7 +107,7 @@ public class CatalogActivity extends AppCompatActivity
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 1);
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 45);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, "Product supplier name example");
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, "444");
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, 444);
 
 
         // Insert a new row for this example into the provider using the ContentResolver.

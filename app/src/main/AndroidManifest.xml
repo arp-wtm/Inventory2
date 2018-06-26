@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.antonella.inventory2">
 
     <application
@@ -22,7 +23,8 @@
         <activity
             android:name="com.example.antonella.inventory2.EditorActivity"
             android:label="@string/edit_product_detail"
-            android:parentActivityName="com.example.antonella.inventory2.CatalogActivity">
+            android:parentActivityName="com.example.antonella.inventory2.CatalogActivity"
+            tools:targetApi="jelly_bean">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

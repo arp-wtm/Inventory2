@@ -21,8 +21,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_margin">@dimen/list_margin</item>
-        <item name="android:divider">@color/backgroundColor</item>
-        <item name="android:dividerHeight">@dimen/text_padding</item>
+        <item name="android:padding">@dimen/text_padding</item>
     </style>
 
 

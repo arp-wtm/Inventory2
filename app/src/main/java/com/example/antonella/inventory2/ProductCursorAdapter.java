@@ -27,8 +27,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
@@ -81,7 +81,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         TextView nameTextView = view.findViewById(R.id.product_name);
         TextView priceTextView = view.findViewById(R.id.product_price);
         TextView quantityTextView = view.findViewById(R.id.product_quantity);
-        ImageView saleImageView = view.findViewById(R.id.sale_button);
+        Button saleImageView = view.findViewById(R.id.sale_button);
 
 
         // Find the columns of product attributes that we're interested in
@@ -107,7 +107,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         nameTextView.setText(productName);
         priceTextView.setText(productPrice);
         quantityTextView.setText(productQuantity);
-        //  set an onClickListener for the sale
+        //  set an onClickListener for the sale button
         saleImageView.setOnClickListener(new View.OnClickListener() {
 
             @Override
