@@ -36,7 +36,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     /**
      * Name of the database file
      */
-    private static final String DATABASE_NAME = "retail.db";
+    private static final String DATABASE_NAME = "products.db";
 
     /**
      * Database version. If you change the database schema,
@@ -61,7 +61,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the product table
-        String SQL_CREATE_PRODUCT_TABLE = "CREATE TABLE " + ProductEntry.TABLE_NAME + " ( "
+        String SQL_CREATE_PRODUCTS_TABLE = "CREATE TABLE " + ProductEntry.TABLE_NAME + " ( "
                 + ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
                 + ProductEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL DEFAULT 0, "
@@ -73,7 +73,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
          * Execute the SQL statement on the SQLite DATABASE instance class db
          * param passed into onCreate
          */
-        db.execSQL(SQL_CREATE_PRODUCT_TABLE);
+        db.execSQL(SQL_CREATE_PRODUCTS_TABLE);
 
 
     }

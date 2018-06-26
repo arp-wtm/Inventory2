@@ -51,9 +51,8 @@ public final class ProductContract {
 
     /**
      * Possible path (appended to base content URI for possible URI's)
-     * For instance, content://com.example.android.pets/pets/ is a valid path for
-     * looking at pet data. content://com.example.android.pets/staff/ will fail,
-     * as the ContentProvider hasn't been given any information on what to do with "staff".
+     * For instance, content://com.example.antonella.inventory2/products is a valid path for
+     * looking at product data.
      */
     public static final String PATH_PRODUCTS = "products";
 

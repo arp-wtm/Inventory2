@@ -139,7 +139,7 @@ public class ProductProvider extends ContentProvider {
         // Set notification URI on the Cursor,
         // so we know what content URI the Cursor was created for.
         // If the data at this URI changes, then we know we need to update the Cursor.
-        cursor.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         // Return the cursor
         return cursor;
@@ -163,9 +163,8 @@ public class ProductProvider extends ContentProvider {
     private Uri insertProduct(Uri uri, ContentValues values) {
         // Check that the name is not null
         String name = values.getAsString(ProductEntry.COLUMN_PRODUCT_NAME);
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(getContext(), R.string.insert_valid_name, Toast.LENGTH_SHORT).show();
-            return null;
+        if (name == null) {
+            throw new IllegalArgumentException("Product requires a name");
         }
 
         // Check that user insert a valid product price
@@ -181,15 +180,13 @@ public class ProductProvider extends ContentProvider {
 
         // Check that the supplier name is not null
         String supplierName = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME);
-        if (TextUtils.isEmpty(supplierName)) {
-            Toast.makeText(getContext(), R.string.insert_valid_supplier_name, Toast.LENGTH_SHORT).show();
-            return null;
+        if (supplierName == null) {
+            throw new IllegalArgumentException("Product requires a supplier name");
         }
         // Check that the supplier phone number is not null
         String supplierPhone = values.getAsString(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
-        if (TextUtils.isEmpty(supplierPhone)) {
-            Toast.makeText(getContext(), R.string.insert_valid_supplier_phone, Toast.LENGTH_SHORT).show();
-            return null;
+        if (supplierPhone == null) {
+            throw new IllegalArgumentException("Product requires a supplier phone number ");
         }
 
 
@@ -205,7 +202,7 @@ public class ProductProvider extends ContentProvider {
         }
 
         // Notify all listeners that the data has changed for the pet content URI
-        Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+       getContext().getContentResolver().notifyChange(uri, null);
 
         // Return the new URI with the ID (of the newly inserted row) appended at the end
         return ContentUris.withAppendedId(uri, id);
@@ -294,7 +291,7 @@ public class ProductProvider extends ContentProvider {
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
         if (rowsUpdated != 0) {
-            Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // Return the number of rows updated
@@ -328,7 +325,7 @@ public class ProductProvider extends ContentProvider {
         // If 1 or more rows were deleted, then notify all listeners that the data at the
         // given URI has changed
         if (rowsDeleted != 0) {
-            Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // Return the number of rows deleted

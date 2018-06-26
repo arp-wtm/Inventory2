@@ -20,14 +20,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditorActivity"
+            android:name="com.example.antonella.inventory2.EditorActivity"
             android:label="@string/edit_product_detail"
-            android:parentActivityName=".CatalogActivity">
+            android:parentActivityName="com.example.antonella.inventory2.CatalogActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CatalogActivity" />
         </activity>
+        <provider
+            android:name= "com.example.antonella.inventory2.data.ProductProvider"
+            android:authorities= "com.example.antonella.inventory2"
+            android:exported= "false"/>
     </application>
 
 </manifest>

@@ -46,7 +46,7 @@ public class ProductCursorAdapter extends CursorAdapter {
      * @param context The context
      * @param c       The cursor from which to get the data.
      */
-    public ProductCursorAdapter(Context context, Cursor c) {
+    ProductCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
 
@@ -91,8 +91,8 @@ public class ProductCursorAdapter extends CursorAdapter {
 
         // Read the products attributes from the Cursor for the current product
         String productName = cursor.getString(nameColumnIndex);
-        int productPrice = cursor.getInt(priceColumnIndex);
-        final int productQuantity = cursor.getInt(quantityColumnIndex);
+        String productPrice = cursor.getString(priceColumnIndex);
+        final String productQuantity = cursor.getString(quantityColumnIndex);
         final Long productId = cursor.getLong(cursor.getColumnIndexOrThrow(ProductEntry._ID));
 
 
@@ -113,7 +113,7 @@ public class ProductCursorAdapter extends CursorAdapter {
             @Override
             public void onClick(View view) {
                 // when sale Image is clicked the quantity get -1
-                int quantity = productQuantity - 1;
+                int quantity = Integer.parseInt(productQuantity) - 1;
                 ContentValues values = new ContentValues();
                 values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
                 String selection = ProductEntry._ID + "=?";

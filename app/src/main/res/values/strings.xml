@@ -16,4 +16,15 @@
     <string name="insert_valid_supplier_phone">insert a valid supplier phone number</string>
     <string name="action_insert_dummy_data">insert dummy data</string>
     <string name="action_delete_all_entries">delete all entries</string>
+    <string name="edit_product_detail_new_product">Add Product</string>
+    <string name="edit_product_detail_update_product">Edit Product</string>
+    <string name="editor_insert_failed">product save failed</string>
+    <string name="editor_insert_successful">product save done</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+    <string name="delete_dialog_msg">Delete product?</string>
+    <string name="cancel">Cancel</string>
+    <string name="editor_delete_product_failed">product delete failed</string>
+    <string name="editor_delete_product_successful">product deleted</string>
 </resources>
