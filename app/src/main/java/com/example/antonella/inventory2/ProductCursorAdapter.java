@@ -19,7 +19,6 @@
 package com.example.antonella.inventory2;
 
 import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,7 +26,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
@@ -38,7 +36,9 @@ import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
  * as its data source. This adapter knows how to create list items
  * for each row of product data in the {@link Cursor}.
  */
-public class ProductCursorAdapter extends CursorAdapter {
+class ProductCursorAdapter extends CursorAdapter {
+
+    private static final String TAG = ProductCursorAdapter.class.getSimpleName();
 
     /**
      * Constructs a new {@link ProductCursorAdapter}.
@@ -46,7 +46,7 @@ public class ProductCursorAdapter extends CursorAdapter {
      * @param context The context
      * @param c       The cursor from which to get the data.
      */
-    ProductCursorAdapter(Context context, Cursor c) {
+    public ProductCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
 
@@ -81,46 +81,47 @@ public class ProductCursorAdapter extends CursorAdapter {
         TextView nameTextView = view.findViewById(R.id.product_name);
         TextView priceTextView = view.findViewById(R.id.product_price);
         TextView quantityTextView = view.findViewById(R.id.product_quantity);
-        Button saleImageView = view.findViewById(R.id.sale_button);
+        TextView saleTextView = view.findViewById(R.id.sale_button);
 
 
         // Find the columns of product attributes that we're interested in
+        int id = cursor.getInt(cursor.getColumnIndex(ProductEntry._ID));
         int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
 
         // Read the products attributes from the Cursor for the current product
-        String productName = cursor.getString(nameColumnIndex);
-        String productPrice = cursor.getString(priceColumnIndex);
-        final String productQuantity = cursor.getString(quantityColumnIndex);
         final Long productId = cursor.getLong(cursor.getColumnIndexOrThrow(ProductEntry._ID));
+        String productName = cursor.getString(nameColumnIndex);
+        float price = cursor.getFloat(priceColumnIndex);
+        String productPrice = String.valueOf(price);
+        final int quantity = cursor.getInt(quantityColumnIndex);
+        final String productQuantity = String.valueOf(quantity);
 
 
         // If the product name is empty string or null, then use some default text
         // that says "insert valid name", so the TextView isn't blank.
         if (TextUtils.isEmpty(productName)) {
-            productName = context.getString(R.string.insert_valid_name);
+            productName = context.getString(R.string.product_name);
         }
 
-
+        final Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
         priceTextView.setText(productPrice);
         quantityTextView.setText(productQuantity);
         //  set an onClickListener for the sale button
-        saleImageView.setOnClickListener(new View.OnClickListener() {
-
+        saleTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // when sale Image is clicked the quantity get -1
-                int quantity = Integer.parseInt(productQuantity) - 1;
-                ContentValues values = new ContentValues();
-                values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
-                String selection = ProductEntry._ID + "=?";
-                Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productId);
-                String[] selectionArgs = new String[]{String.valueOf(productId)};
-                context.getContentResolver().update(currentProductUri, values, selection, selectionArgs);
+                // when SALE button is clicked the quantity get -1
+                //call the productSale of CatalogActivity
+                CatalogActivity Activity = (CatalogActivity) context;
+                Activity.productSale(productId, Integer.valueOf(productQuantity));
+
             }
         });
+
+
     }
 }

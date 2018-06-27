@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,10 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
-
-import static com.example.antonella.inventory2.R.string.add_new_product;
 
 public class CatalogActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -30,7 +28,7 @@ public class CatalogActivity extends AppCompatActivity
     /**
      * Identifier for the product data loader
      */
-    private static final int PRODUCT_LOADER = 1;
+    private static final int PRODUCT_LOADER = 0;
 
     /**
      * Adapter for the ListView
@@ -48,16 +46,12 @@ public class CatalogActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, add_new_product, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                // calls editor screen
                 Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
                 startActivity(intent);
-
             }
         });
 
-        // Find the ListView which will be populated with the pet data
+        // Find the ListView which will be populated with the product data
         ListView productsListView = findViewById(R.id.list);
 
         // Find and set empty view on the ListView,
@@ -101,13 +95,13 @@ public class CatalogActivity extends AppCompatActivity
      */
     private void insertProduct() {
         // Create a ContentValues object where column names are the keys,
-        // and product! attributes are the values.
+        // and product attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Product example");
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 1);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 45);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, "Product supplier name example");
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, 444);
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME,"Product example");
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE,555.07);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY,4);
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME,"Product supplier name example");
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,444);
 
 
         // Insert a new row for this example into the provider using the ContentResolver.
@@ -118,11 +112,11 @@ public class CatalogActivity extends AppCompatActivity
     }
 
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all products in the database.
      */
     private void deleteAllProducts() {
         int rowsDeleted = getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from products database");
     }
 
 
@@ -156,7 +150,7 @@ public class CatalogActivity extends AppCompatActivity
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductEntry.COLUMN_PRODUCT_PRICE,
-                ProductEntry.COLUMN_PRODUCT_QUANTITY};
+                ProductEntry.COLUMN_PRODUCT_QUANTITY };
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -176,7 +170,22 @@ public class CatalogActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-// Callback called when the data needs to be deleted
+    // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
+    }
+
+    public void productSale(Long productID, int productQuantity) {
+        productQuantity = productQuantity - 1;
+        if (productQuantity >= 0) {
+            ContentValues values = new ContentValues();
+            values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
+            Uri updateUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productID);
+            int rowsAffected = getContentResolver().update(updateUri, values, null, null);
+            Toast.makeText(this, "Quantity changed", Toast.LENGTH_SHORT).show();
+
+            Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
+        } else {
+            Toast.makeText(this, "Product to order", Toast.LENGTH_SHORT).show();
+        }
     }
 }

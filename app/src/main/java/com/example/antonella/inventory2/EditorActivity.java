@@ -80,7 +80,7 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText mSupplierPhoneNumberEditText;
 
     /**
-     * Boolean flag that keeps track of whether the pet has been edited (true) or not (false)
+     * Boolean flag that keeps track of whether the product has been edited (true) or not (false)
      */
     private boolean mProductHasChanged = false;
 
@@ -104,6 +104,7 @@ public class EditorActivity extends AppCompatActivity implements
         // in order to figure out if we're creating a new product or editing an existing one.
         Intent intent = getIntent();
         mCurrentProductUri = intent.getData();
+
 
         // If the intent DOES NOT contain a product content URI, then we know that we are
         // creating a new product.
@@ -146,16 +147,16 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get data input from editor and save in product table.
      */
-    private void insertProduct() {
+    private void saveProduct() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
         // If the price is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        int price = 0;
+        // integer value. Use 0.0f by default.
+        float price = 0.0f;
         if (!TextUtils.isEmpty(priceString)) {
-            price = Integer.parseInt(priceString);
+            price = Float.parseFloat(priceString);
         }
         String quantityString = mQuantityEditText.getText().toString().trim();
         // If the quantity is not provided by the user, don't try to parse the string into an
@@ -183,7 +184,7 @@ public class EditorActivity extends AppCompatActivity implements
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, quantity);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierNameString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,
                 supplierPhoneNumberString);
@@ -191,7 +192,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Determine if this is a new or existing pet by checking if mCurrentPetUri
         // is null or not
         if (mCurrentProductUri == null) {
-            // This is a NEW pet, so insert a new product into the provider,
+            // This is a NEW product so insert a new product into the provider,
             // returning the content URI for the new product.
             Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
@@ -206,7 +207,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         } else {
-            // Otherwise this is an EXISTING peroduct, so update the product
+            // Otherwise this is an EXISTING product, so update the product
             // with content URI: mCurrentProductUri and pass in the new ContentValues.
             // Pass in null for the selection and selection args
             // because mCurrentProductUri will already identify the correct row
@@ -256,7 +257,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save product to database
-                insertProduct();
+                saveProduct();
                 // Exit activity
                 finish();
                 return true;
@@ -267,7 +268,7 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // If the pet hasn't changed, continue with navigating up to parent activity
+                // If the product hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
                 if (!mProductHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
@@ -359,7 +360,7 @@ public class EditorActivity extends AppCompatActivity implements
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
@@ -419,15 +420,15 @@ public class EditorActivity extends AppCompatActivity implements
 
             // Extract out the value from the Cursor for the given column index
             String name = data.getString(nameColumnIndex);
-            int price = data.getInt(priceColumnIndex);
+            float price = data.getFloat(priceColumnIndex);
             int quantity = data.getInt(quantityColumnIndex);
             String supplierName = data.getString(supplierNameColumnIndex);
             String supplierPhoneNumber = data.getString(supplierPhoneNumberColumnIndex);
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mPriceEditText.setText(price);
-            mQuantityEditText.setText(quantity);
+            mPriceEditText.setText(""+price);
+            mQuantityEditText.setText(""+quantity);
             mSupplierNameEditText.setText(supplierName);
             mSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
