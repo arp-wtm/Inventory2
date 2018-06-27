@@ -181,6 +181,7 @@ public class CatalogActivity extends AppCompatActivity
             values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
             Uri updateUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productID);
             int rowsAffected = getContentResolver().update(updateUri, values, null, null);
+
             Toast.makeText(this, "Quantity changed", Toast.LENGTH_SHORT).show();
 
             Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");

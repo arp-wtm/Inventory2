@@ -209,7 +209,7 @@ public class ProductProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, ContentValues contentValues, String selection,
+    public int update( Uri uri, ContentValues contentValues, String selection,
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
@@ -239,7 +239,7 @@ public class ProductProvider extends ContentProvider {
             String name = values.getAsString(COLUMN_PRODUCT_NAME);
             if (TextUtils.isEmpty(name)) {
                 Toast.makeText(getContext(), R.string.insert_valid_name, Toast.LENGTH_SHORT).show();
-                return 0;
+
             }
         }
 
@@ -266,13 +266,13 @@ public class ProductProvider extends ContentProvider {
         String supplierName = values.getAsString(COLUMN_PRODUCT_SUPPLIER_NAME);
         if (TextUtils.isEmpty(supplierName)) {
             Toast.makeText(getContext(), R.string.insert_valid_supplier_name, Toast.LENGTH_SHORT).show();
-            return 0;
+
         }
         // Check that the supplier phone number is not null
         String supplierPhone = values.getAsString(COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER);
         if (TextUtils.isEmpty(supplierPhone)) {
             Toast.makeText(getContext(), R.string.insert_valid_supplier_phone, Toast.LENGTH_SHORT).show();
-            return 0;
+
         }
 
 
@@ -289,9 +289,7 @@ public class ProductProvider extends ContentProvider {
 
         // If 1 or more rows were updated, then notify all listeners that the data at the
         // given URI has changed
-        if (rowsUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
+        if (rowsUpdated != 0) getContext().getContentResolver().notifyChange(uri, null);
 
         // Return the number of rows updated
         return rowsUpdated;
