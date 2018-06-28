@@ -17,12 +17,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <!-- main activity list style to show a list of products -->
-    <style name="list_view">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_margin">@dimen/list_margin</item>
-        <item name="android:padding">@dimen/text_padding</item>
-    </style>
 
 
 </resources>

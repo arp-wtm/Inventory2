@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">Inventory Stage 2</string>
-    <string name="action_settings">settings</string>
-    <string name="add_new_product">add a new product</string>
     <string name="init_instructions">nothing to display because no data stored, click on below + button to add a new product</string>
-    <string name="product_name">product name</string>
+    <string name="product_name">please insert product name</string>
     <string name="product_price">product price</string>
     <string name="product_quantity">product quantity</string>
     <string name="product_supplier_name">product supplier name</string>
@@ -28,4 +26,13 @@
     <string name="editor_delete_product_failed">product delete failed</string>
     <string name="editor_delete_product_successful">product deleted</string>
     <string name="one_sale">SALE</string>
+    <string name="add_one">add one to quantity</string>
+    <string name="minus_one">quantity minus one</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="ZERO">0</string>
+    <string name="currency_symbol">$</string>
+    <string name="unit">pcs</string>
+    <string name="delete_button">DELETE</string>
+    <string name="order_button">ORDER</string>
 </resources>

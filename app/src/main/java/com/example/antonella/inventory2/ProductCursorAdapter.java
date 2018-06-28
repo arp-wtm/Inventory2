@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
 
+import java.util.Locale;
+
 /**
  * {@link ProductCursorAdapter} is an adapter for a {@link Cursor} of product data
  * as its data source. This adapter knows how to create list items
@@ -94,7 +96,8 @@ class ProductCursorAdapter extends CursorAdapter {
         final Long productId = cursor.getLong(cursor.getColumnIndexOrThrow(ProductEntry._ID));
         String productName = cursor.getString(nameColumnIndex);
         float price = cursor.getFloat(priceColumnIndex);
-        String productPrice = String.valueOf(price);
+        // format price to be displayed with two decimals
+        String productPrice = String.format(Locale.US, "%.2f", price);
         final int quantity = cursor.getInt(quantityColumnIndex);
         final String productQuantity = String.valueOf(quantity);
 

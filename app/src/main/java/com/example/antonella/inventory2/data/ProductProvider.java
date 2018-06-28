@@ -32,9 +32,16 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.antonella.inventory2.R;
-import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
 
-import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.*;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.COLUMN_PRODUCT_NAME;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.CONTENT_ITEM_TYPE;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.CONTENT_LIST_TYPE;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.TABLE_NAME;
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry._ID;
 
 /**
  * {@link ContentProvider} for Inventory stage 2 app.
@@ -209,7 +216,7 @@ public class ProductProvider extends ContentProvider {
     }
 
     @Override
-    public int update( Uri uri, ContentValues contentValues, String selection,
+    public int update(Uri uri, ContentValues contentValues, String selection,
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {

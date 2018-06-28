@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
 
+@SuppressWarnings("WeakerAccess")
 public class CatalogActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -97,18 +98,18 @@ public class CatalogActivity extends AppCompatActivity
         // Create a ContentValues object where column names are the keys,
         // and product attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME,"Product example");
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE,555.07);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY,4);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME,"Product supplier name example");
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,444);
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, "brand abcd obj");
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, 499.99);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 17);
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, "supplier xyzt");
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, 123456789);
 
 
         // Insert a new row for this example into the provider using the ContentResolver.
         // Use the {@link ProductEntry#CONTENT_URI} to indicate that we want to insert
         // into the products database table.
-        // Receive the new content URI that will allow us to access example data in the future.
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+
+        getContentResolver().insert(ProductEntry.CONTENT_URI, values);
     }
 
     /**
@@ -150,7 +151,7 @@ public class CatalogActivity extends AppCompatActivity
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductEntry.COLUMN_PRODUCT_PRICE,
-                ProductEntry.COLUMN_PRODUCT_QUANTITY };
+                ProductEntry.COLUMN_PRODUCT_QUANTITY};
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
@@ -170,21 +171,23 @@ public class CatalogActivity extends AppCompatActivity
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-    // Callback called when the data needs to be deleted
+        // Callback called when the data needs to be deleted
         mCursorAdapter.swapCursor(null);
     }
 
+    /**
+     * method to decrement of one unit quantity of the product with specific ID
+     */
     public void productSale(Long productID, int productQuantity) {
         productQuantity = productQuantity - 1;
         if (productQuantity >= 0) {
             ContentValues values = new ContentValues();
             values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, productQuantity);
             Uri updateUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, productID);
-            int rowsAffected = getContentResolver().update(updateUri, values, null, null);
+            // Perform the update on the database and get the number of rows affected
+            int rowsUpdated = getContentResolver().update(updateUri, values, null, null);
 
-            Toast.makeText(this, "Quantity changed", Toast.LENGTH_SHORT).show();
-
-            Log.d("Log msg", "rowsAffected " + rowsAffected + " - productID " + productID + " - quantity " + productQuantity + " , decreaseCount has been called.");
+            Toast.makeText(this, "Quantity changed in: " + rowsUpdated + " product ",  Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Product to order", Toast.LENGTH_SHORT).show();
         }

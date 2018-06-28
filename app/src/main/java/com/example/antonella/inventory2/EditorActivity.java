@@ -18,6 +18,7 @@ package com.example.antonella.inventory2;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -36,9 +37,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
+
+import java.util.Locale;
 
 /**
  * Allows user to create a new product or edit an existing one.
@@ -64,10 +68,26 @@ public class EditorActivity extends AppCompatActivity implements
      */
     private EditText mPriceEditText;
 
+
+    /**
+     * Button -  to decrease product's quantity
+     */
+    private TextView mMinusButton;
+
     /**
      * EditText field to enter the product's quantity
      */
     private EditText mQuantityEditText;
+
+    /**
+     * Button + to increment product's quantity
+     */
+    private TextView mAddButton;
+
+    /**
+     * Current quantity of product
+     */
+    private int mQuantity;
 
     /**
      * EditText field to enter the product's supplier name
@@ -83,18 +103,29 @@ public class EditorActivity extends AppCompatActivity implements
      * Boolean flag that keeps track of whether the product has been edited (true) or not (false)
      */
     private boolean mProductHasChanged = false;
+    /**
+     * Button + to delete product
+     */
+    private TextView mDelete;
+    /**
+     * Button to call supplier phone number for new order
+     */
+    private TextView mOrder;
+
 
     /**
      * OnTouchListener that listens for any user touches on a View, implying that they are modifying
      * the view, and we change the mProductHasChanged boolean to true.
      */
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mProductHasChanged = true;
             return false;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,19 +159,99 @@ public class EditorActivity extends AppCompatActivity implements
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.product_name);
         mPriceEditText = findViewById(R.id.product_price);
+        mMinusButton = findViewById(R.id.minus_button);
         mQuantityEditText = findViewById(R.id.product_quantity);
+        mAddButton = findViewById(R.id.add_button);
         mSupplierNameEditText = findViewById(R.id.product_supplier_name);
         mSupplierPhoneNumberEditText = findViewById(R.id.product_supplier_phone_number);
+        mDelete = findViewById(R.id.delete_button);
+        mOrder = findViewById(R.id.order_button);
+
 
         // Setup OnTouchListeners on all the input fields, so we can determine if the user
         // has touched or modified them. This will let us know if there are unsaved changes
         // or not, if the user tries to leave the editor without saving.
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
+        mMinusButton.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
+        mAddButton.setOnTouchListener(mTouchListener);
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
 
+        mPriceEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    // when EditText loses focus format the field with 2 decimals
+                    String priceString = mPriceEditText.getText().toString().trim();
+                    float price = 0;
+                    try {
+                        price = Float.parseFloat(priceString);
+                    } catch (NumberFormatException e) {
+                    }
+                    String formattedPrice = String.format(Locale.US, "%.2f", price);
+                    mPriceEditText.setText(formattedPrice);
+                }
+            }
+        });
+
+        // set  a listener to capture the user click over - button
+        // decrement quantity, change text to quantity TexView.
+        // no need to send data to database yet, until use will save product
+        mMinusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // read the current string for quantity from text editor
+                String quantityString = mQuantityEditText.getText().toString().trim();
+                // set the current quantity to the integer parse from the string
+                mQuantity = Integer.parseInt(quantityString);
+                // no negative input allowed. If zero, no action perform
+                if (mQuantity == 0) {
+                    Toast.makeText(EditorActivity.this, "Product to order", Toast.LENGTH_SHORT).show();
+                } else {
+                    mQuantity--;
+                    mQuantityEditText.setText(String.valueOf(mQuantity));
+                }
+            }
+        });
+        // set a listener to capture the user click over + button
+        // increment quantity, change text to quantity TexView.
+        // no need to send data to database yet, until user will save product
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // read the current string for quantity from text editor
+                String quantityString = mQuantityEditText.getText().toString().trim();
+                // set the current quantity to the integer parse from the string
+                mQuantity = Integer.parseInt(quantityString);
+                mQuantity++;
+                mQuantityEditText.setText(String.valueOf(mQuantity));
+            }
+        });
+
+        // set a listener to capture the user click over button DELETE
+        mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // call the dialog to confirmation
+                // and if positive, remove product from database
+                // else return
+                showDeleteConfirmationDialog();
+
+            }
+        });
+
+        // set a listener to capture the user click over button ORDER
+        mOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String supplierPhoneNumber = mSupplierPhoneNumberEditText.getText().toString().trim();
+                // this send of intent to telephone call works without adding permission to manifest
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", supplierPhoneNumber, null));
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -159,12 +270,7 @@ public class EditorActivity extends AppCompatActivity implements
             price = Float.parseFloat(priceString);
         }
         String quantityString = mQuantityEditText.getText().toString().trim();
-        // If the quantity is not provided by the user, don't try to parse the string into an
-        // integer value. Use 0 by default.
-        int quantity = 0;
-        if (!TextUtils.isEmpty(quantityString)) {
-            quantity = Integer.parseInt(quantityString);
-        }
+        int quantity = getQuantity();
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneNumberString = mSupplierPhoneNumberEditText.getText().toString().trim();
 
@@ -189,7 +295,7 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,
                 supplierPhoneNumberString);
 
-        // Determine if this is a new or existing pet by checking if mCurrentPetUri
+        // Determine if this is a new or existing product by checking if mCurrentProductUri
         // is null or not
         if (mCurrentProductUri == null) {
             // This is a NEW product so insert a new product into the provider,
@@ -225,6 +331,20 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * Get product's quantity input from editor and if empty set it to 0
+     */
+    private int getQuantity() {
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        // If the quantity is not provided by the user, don't try to parse the string into an
+        // integer value. Use 0 by default.
+        int quantity = 0;
+        if (!TextUtils.isEmpty(quantityString)) {
+            quantity = Integer.parseInt(quantityString);
+        }
+        return quantity;
     }
 
     @Override
@@ -401,6 +521,7 @@ public class EditorActivity extends AppCompatActivity implements
                 null);         // Default sort order
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Bail early if the cursor Data is null or there is less than 1 row in the cursor
@@ -427,8 +548,8 @@ public class EditorActivity extends AppCompatActivity implements
 
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mPriceEditText.setText(""+price);
-            mQuantityEditText.setText(""+quantity);
+            mPriceEditText.setText(" " + price);
+            mQuantityEditText.setText(" " + quantity);
             mSupplierNameEditText.setText(supplierName);
             mSupplierPhoneNumberEditText.setText(supplierPhoneNumber);
 
@@ -449,7 +570,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
 
     /**
-     * Perform the deletion of the pet in the database.
+     * Perform the deletion of the product in the database.
      */
     private void deleteProduct() {
         // Only perform the delete if this is an existing product

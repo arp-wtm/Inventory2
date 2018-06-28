@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- made by Antonella on Jun/23/2018 using Udacity ud845 course
+<?xml version="1.0" encoding="utf-8"?><!-- made by Antonella on Jun/23/2018 using Udacity ud845 course
      examples that are under this license:
      Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +11,12 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 --><!-- Layout for the list of products -->
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".EditorActivity">
 
 
@@ -32,30 +31,76 @@
         app:layout_constraintBottom_toTopOf="@+id/product_price"
         app:layout_constraintStart_toStartOf="@+id/product_price"
         app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_padding"
+        app:layout_constraintLeft_toRightOf="@id/product_price"
+        app:layout_constraintTop_toBottomOf="@+id/product_name"
+        android:text="@string/currency_symbol"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
 
     <EditText
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/product_price"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:labelFor="@id/product_price"
         android:padding="@dimen/text_padding"
-        app:layout_constraintBottom_toTopOf="@+id/product_quantity"
-        app:layout_constraintStart_toStartOf="@+id/product_quantity"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/quantity_layout"
+        app:layout_constraintStart_toStartOf="@id/quantity_layout"
         app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-    <EditText
-        android:id="@+id/product_quantity"
+    <LinearLayout
+        android:id="@+id/quantity_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/product_quantity"
-        android:inputType="number"
-        android:labelFor="@id/product_quantity"
-        android:padding="@dimen/text_padding"
         app:layout_constraintBottom_toTopOf="@+id/product_supplier_name"
         app:layout_constraintStart_toStartOf="@+id/product_supplier_name"
-        app:layout_constraintTop_toBottomOf="@+id/product_price" />
+        app:layout_constraintTop_toBottomOf="@+id/product_price">
+
+        <TextView
+            android:id="@+id/minus_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/minus_one"
+            android:text="@string/minus"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:id="@+id/product_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/product_quantity"
+            android:inputType="number"
+            android:labelFor="@id/product_quantity"
+            android:padding="@dimen/text_padding"
+            android:text="@string/ZERO"
+            android:textAlignment="center" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/text_padding"
+            android:text="@string/unit"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+        <TextView
+            android:id="@+id/add_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/add_one"
+            android:text="@string/plus"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/product_supplier_name"
@@ -67,7 +112,7 @@
         android:padding="@dimen/text_padding"
         app:layout_constraintBottom_toTopOf="@+id/product_supplier_phone_number"
         app:layout_constraintStart_toStartOf="@+id/product_supplier_phone_number"
-        app:layout_constraintTop_toBottomOf="@+id/product_quantity" />
+        app:layout_constraintTop_toBottomOf="@+id/quantity_layout" />
 
     <EditText
         android:id="@+id/product_supplier_phone_number"
@@ -77,8 +122,45 @@
         android:inputType="phone"
         android:labelFor="@id/product_supplier_phone_number"
         android:padding="@dimen/text_padding"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_supplier_name" />
+        app:layout_constraintBottom_toBottomOf="@+id/product_supplier_name"
+        app:layout_constraintStart_toStartOf="@+id/product_supplier_name"
+        app:layout_constraintTop_toBottomOf="@+id/delete_and_order_buttons_layout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:id="@+id/delete_and_order_buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/list_item_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_supplier_phone_number">
+
+        <TextView
+            android:id="@+id/delete_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/delete"
+            android:padding="@dimen/text_padding"
+            android:text="@string/delete_button"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <TextView
+            android:id="@+id/order_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/product_supplier_phone_number"
+            android:padding="@dimen/text_padding"
+            android:text="@string/order_button"
+            android:textAlignment="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

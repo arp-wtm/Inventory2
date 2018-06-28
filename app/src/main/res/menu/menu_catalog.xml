@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- made by Antonella on Jun/23/2018 using ud845 ABND Udacity
+<?xml version="1.0" encoding="utf-8"?><!-- made by Antonella on Jun/23/2018 using ud845 ABND Udacity
      course examples that are under this license:
 Copyright (C) 2016 The Android Open Source Project
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,8 +10,7 @@ Copyright (C) 2016 The Android Open Source Project
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<!-- Options menu for the CatalogActivity -->
+--><!-- Options menu for the CatalogActivity -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
