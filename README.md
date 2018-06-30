@@ -8,11 +8,14 @@ This app contains activities  for the user to:
 - Add Product with a great button
 - Delete all entries
 - Insert dummy data
-In the Catalog Activity each list item displays the Product Name, Price, and Quantity. With a button "SALE" to decrease quantity of the product saled.
+In the Catalog Activity each list item displays the Product Name, Price, and Quantity. With a button "SALE" to decrease quantity of the product saled. CatalogActivity Class controls that no negative values are displayed. When zero quantity is reached a Toast advices to order the product saled!
 Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number are the field stored in the database and shown in the EditorActivity. This screen has also an overlay menu that as Delete if is an existing product, and Save for both existing and new.
 There are also two button to delete the product record entirely or to order calling the supplier phone number.
-To better perform functionality, queries on SQLite database are made in background thread, implementing a Loader, a Content Provider and a cursorAdapter that will populate the list on the first screen.
+To better perform functionality, queries on SQLite database are made in background thread, implementing a Loader, a Content Provider and a ProductCursorAdapter that will populate the list on the first screen.
 In the Editor Activity, the button "-" and "+"  used for change the quantity of product edited, don't send update to database. It will be made when user save the product.
+The ProductContract Class establishes a contract between the ProductProvider and other applications. It ensures that  ProductProvider can be accessed correctly even if there are changes to the actual values of URIs, column names etc.
+Since it provides mnemonic names for its constants, developers are less likely to use incorrect values for column names or URIs. It's easy to make the Javadoc documentation available to the clients that want to use ProductProvider.
+ProductProvider is just for sharing app's data. When you want to access it, even in another app, it uses the Content Resolver to send commands with specific methods query(), insert(), update(), delete(), and getType(). The last one is for match all  Products table or a single record in Products table. 
 ## TEST
 The code runs without errors on HUAWEI JMM-L22 Android 7.0 Api 24.
 The Android Project is built  for Phone and Tablet with LEVEL API 15: Android 4.0.3 (IceCreamSandwich)
