@@ -7,7 +7,8 @@ This app contains activities  for the user to:
 - See a list of all inventory in the first screen
 - Add Product with a great button
 - Delete all entries
-- Insert dummy data
+- Insert dummy data.
+
 In the Catalog Activity each list item displays the Product Name, Price, and Quantity. With a button "SALE" to decrease quantity of the product saled. CatalogActivity Class controls that no negative values are displayed. When zero quantity is reached a Toast advices to order the product saled!
 Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number are the field stored in the database and shown in the EditorActivity. This screen has also an overlay menu that as Delete if is an existing product, and Save for both existing and new.
 There are also two button to delete the product record entirely or to order calling the supplier phone number.
