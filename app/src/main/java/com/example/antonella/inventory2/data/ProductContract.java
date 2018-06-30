@@ -93,7 +93,7 @@ public final class ProductContract {
         public final static String COLUMN_PRODUCT_NAME = "name";
 
         /**
-         * Price of the product - Type: Integer
+         * Price of the product - Type: real for decimals currency
          */
         public final static String COLUMN_PRODUCT_PRICE = "price";
 

@@ -23,8 +23,12 @@ package com.example.antonella.inventory2.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.example.antonella.inventory2.R;
 import com.example.antonella.inventory2.data.ProductContract.ProductEntry;
+
+import static com.example.antonella.inventory2.data.ProductContract.ProductEntry.TABLE_NAME;
 
 /**
  * Database helper that manages creation, upgrade and version management.
@@ -61,13 +65,13 @@ class ProductDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the product table
-        String SQL_CREATE_PRODUCTS_TABLE = "CREATE TABLE " + ProductEntry.TABLE_NAME + " ( "
+        String SQL_CREATE_PRODUCTS_TABLE = "CREATE TABLE " + TABLE_NAME + " ( "
                 + ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL DEFAULT 'unknown product name', "
-                + ProductEntry.COLUMN_PRODUCT_PRICE + " REAL NOT NULL DEFAULT 0.0, "
-                + ProductEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
+                + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + ProductEntry.COLUMN_PRODUCT_PRICE + " REAL NOT NULL , "
+                + ProductEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL, "
                 + ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME + " TEXT NOT NULL DEFAULT 'unknown supplier name', "
-                + ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER + " TEXT DEFAULT '(+39)111-123456'"
+                + ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL DEFAULT '(+1)111-123456'"
                 + ");";
         /*
          * Execute the SQL statement on the SQLite DATABASE instance class db
@@ -84,7 +88,15 @@ class ProductDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // The database is still at version 1, so there's nothing to do be done here.
+        Log.v("ProductDbHelper", R.string.upgrading_database + " " + newVersion);
+        if (newVersion > oldVersion) {
+            // Upgrade
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            // Create tables again
+            onCreate(db);
 
+        }
     }
+
+
 }

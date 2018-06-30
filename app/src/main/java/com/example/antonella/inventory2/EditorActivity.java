@@ -18,7 +18,6 @@ package com.example.antonella.inventory2;
  * limitations under the License.
  */
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -140,7 +139,7 @@ public class EditorActivity extends AppCompatActivity implements
         // If the intent DOES NOT contain a product content URI, then we know that we are
         // creating a new product.
         if (mCurrentProductUri == null) {
-            // This is a new pet, so change the app bar to say "Add a Product"
+            // This is a new product, so change the app bar to say "Add a Product"
             setTitle(getString(R.string.edit_product_detail_new_product));
 
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
@@ -179,6 +178,7 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mSupplierPhoneNumberEditText.setOnTouchListener(mTouchListener);
 
+        //set a listener to focus change of price field.
         mPriceEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -212,6 +212,7 @@ public class EditorActivity extends AppCompatActivity implements
                 } else {
                     mQuantity--;
                     mQuantityEditText.setText(String.valueOf(mQuantity));
+                    Toast.makeText(EditorActivity.this, R.string.quantity_changed, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -227,6 +228,7 @@ public class EditorActivity extends AppCompatActivity implements
                 mQuantity = Integer.parseInt(quantityString);
                 mQuantity++;
                 mQuantityEditText.setText(String.valueOf(mQuantity));
+                Toast.makeText(EditorActivity.this, R.string.quantity_changed, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -258,7 +260,13 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Get data input from editor and save in product table.
      */
-    private void saveProduct() {
+    private boolean saveProduct() {
+        // user ask to save but if the product hasn't changed no need to save
+
+        if (!mProductHasChanged) {
+            Toast.makeText(this, R.string.no_change, Toast.LENGTH_SHORT).show();
+            return false;
+        }
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -274,27 +282,59 @@ public class EditorActivity extends AppCompatActivity implements
         String supplierNameString = mSupplierNameEditText.getText().toString().trim();
         String supplierPhoneNumberString = mSupplierPhoneNumberEditText.getText().toString().trim();
 
+
         // Check if this is supposed to be a new product
         // and check if all the fields in the editor are blank
         if (mCurrentProductUri == null &&
-                TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) &&
+                TextUtils.isEmpty(nameString) && price == 0 &&
                 TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(supplierNameString)
                 && TextUtils.isEmpty(supplierPhoneNumberString)) {
-            // Since no fields were modified, we can return early without creating a new product.
+            // Since fields are blanks, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
-            return;
+            return false;
         }
-
         // Create a ContentValues object where column names are the keys,
         // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
-        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierNameString);
-        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,
-                supplierPhoneNumberString);
 
+        // Validate if user insert the product's name before saving
+        if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, R.string.insert_valid_name, Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            values.put(ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+        }
+        // Validate if user insert the product's name before saving
+        if (TextUtils.isEmpty(priceString) || (price < 0)) {
+            Toast.makeText(this, getString(R.string.insert_valid_price), Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        }
+
+        // Validate if user insert the product's quantity before saving
+        if (TextUtils.isEmpty(quantityString) || (quantity < 0)) {
+            Toast.makeText(this, getString(R.string.insert_valid_quantity), Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        }
+        // Validate if user insert the product's supplier name before saving
+        if (TextUtils.isEmpty(supplierNameString)) {
+            Toast.makeText(this, getString(R.string.insert_valid_supplier_name), Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierNameString);
+        }
+
+        // Validate if user insert the product's supplier phone number before saving
+        if (TextUtils.isEmpty(supplierPhoneNumberString)) {
+            Toast.makeText(this, getString(R.string.insert_valid_supplier_phone), Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER,
+                    supplierPhoneNumberString);
+        }
         // Determine if this is a new or existing product by checking if mCurrentProductUri
         // is null or not
         if (mCurrentProductUri == null) {
@@ -331,6 +371,7 @@ public class EditorActivity extends AppCompatActivity implements
                         Toast.LENGTH_SHORT).show();
             }
         }
+        return true;
     }
 
     /**
@@ -342,7 +383,10 @@ public class EditorActivity extends AppCompatActivity implements
         // integer value. Use 0 by default.
         int quantity = 0;
         if (!TextUtils.isEmpty(quantityString)) {
-            quantity = Integer.parseInt(quantityString);
+            try {
+                quantity = Integer.parseInt(quantityString);
+            } catch (NumberFormatException e) {
+            }
         }
         return quantity;
     }
@@ -376,10 +420,10 @@ public class EditorActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Save product to database
-                saveProduct();
-                // Exit activity
-                finish();
+                // Save product to database only if true
+                if (saveProduct())
+                    // Exit activity
+                    finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
@@ -521,7 +565,7 @@ public class EditorActivity extends AppCompatActivity implements
                 null);         // Default sort order
     }
 
-    @SuppressLint("SetTextI18n")
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Bail early if the cursor Data is null or there is less than 1 row in the cursor

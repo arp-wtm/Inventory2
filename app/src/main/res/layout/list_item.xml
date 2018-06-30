@@ -48,7 +48,8 @@
             android:background="@color/colorAccent"
             android:contentDescription="@string/one_sale"
             android:text="@string/one_sale"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textAppearance="?android:textAppearanceLarge"/>
 
 
     </LinearLayout>

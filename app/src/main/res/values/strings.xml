@@ -10,6 +10,8 @@
     <string name="delete">delete</string>
     <string name="edit_product_detail">edit product detail</string>
     <string name="insert_valid_name">insert a valid product name</string>
+    <string name="insert_valid_price">insert a valid product price</string>
+    <string name="insert_valid_quantity">insert a valid product quantity</string>
     <string name="insert_valid_supplier_name">insert a valid product supplier name</string>
     <string name="insert_valid_supplier_phone">insert a valid supplier phone number</string>
     <string name="action_insert_dummy_data">insert dummy data</string>
@@ -20,6 +22,7 @@
     <string name="editor_insert_successful">product save done</string>
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
+    <string name="no_change">No change made. Record already saved</string>
     <string name="keep_editing">Keep Editing</string>
     <string name="delete_dialog_msg">Delete product?</string>
     <string name="cancel">Cancel</string>
@@ -35,4 +38,6 @@
     <string name="unit">pcs</string>
     <string name="delete_button">DELETE</string>
     <string name="order_button">ORDER</string>
+    <string name="upgrading_database">Upgrading database from version</string>
+    <string name="quantity_changed">Quantity changed</string>
 </resources>

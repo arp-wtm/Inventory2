@@ -57,6 +57,7 @@
         android:id="@+id/quantity_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="@dimen/text_padding"
         app:layout_constraintBottom_toTopOf="@+id/product_supplier_name"
         app:layout_constraintStart_toStartOf="@+id/product_supplier_name"
         app:layout_constraintTop_toBottomOf="@+id/product_price">
