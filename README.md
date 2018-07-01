@@ -14,9 +14,11 @@ Product Name, Price, Quantity, Supplier Name, and Supplier Phone Number are the 
 There are also two button to delete the product record entirely or to order calling the supplier phone number.
 To better perform functionality, queries on SQLite database are made in background thread, implementing a Loader, a Content Provider and a ProductCursorAdapter that will populate the list on the first screen.
 In the Editor Activity, the button "-" and "+"  used for change the quantity of product edited, don't send update to database. It will be made when user save the product.
+## EditorActivity screen
+![](https://github.com/arp-wtm/Inventory2/blob/master/Editor.png)
 The ProductContract Class establishes a contract between the ProductProvider and other applications. It ensures that  ProductProvider can be accessed correctly even if there are changes to the actual values of URIs, column names etc.
 Since it provides mnemonic names for its constants, developers are less likely to use incorrect values for column names or URIs. It's easy to make the Javadoc documentation available to the clients that want to use ProductProvider.
-ProductProvider is just for sharing app's data. When you want to access it, even in another app, it uses the Content Resolver to send commands with specific methods query(), insert(), update(), delete(), and getType(). The last one is for match all  Products table or a single record in Products table. 
+ProductProvider is just for sharing app's data. When you want to access it, even in another app, it uses the Content Resolver to send commands with specific methods query(), insert(), update(), delete(), and getType(). The last one is for match all  Products table or a single record in Products table.
 ## TEST
 The code runs without errors on HUAWEI JMM-L22 Android 7.0 Api 24.
 The Android Project is built  for Phone and Tablet with LEVEL API 15: Android 4.0.3 (IceCreamSandwich)
